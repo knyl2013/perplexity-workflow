@@ -86,7 +86,11 @@ function startStream(apiEndpoint, apiKey, apiOrgHeader, model, systemPrompt, con
 
 function addLinkToCitation(content, citations) {
   // Replace [citationNo] with [citationNo](citations[citationNo - 1])
-  return content.replace(/\[(\d+)\]/g, (match, citationNo) => `[[${citationNo}]](${citations[citationNo - 1]})`)
+  // But ignore [citationNo] that already has a link
+  return content.replace(/\[(\d+)\]/g, (match, citationNo) => {
+    const citation = citations[citationNo - 1]
+    return citation ? `[[${citationNo}]](${citation})` : match
+  })
 }
 
 function readStream(streamFile, chatFile, pidStreamFile) {

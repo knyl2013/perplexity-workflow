@@ -1494,13 +1494,14 @@ function run() {
   const archiveDir = `${envVar("alfred_workflow_data")}/archive`
   if (!$.NSFileManager.defaultManager.fileExistsAtPath(archiveDir)) return noArchives()
 
+
   const sfItems = dirContents(archiveDir)
-    .filter(file =&gt; file.endsWith(".json"))
-    .toReversed()
-    .flatMap(file =&gt; {
+    .filter(file => file.endsWith(".json"))
+    .reverse()
+    .flatMap(file => {
       const chatContents = readChat(file)
-      const firstQuestion = chatContents.find(item =&gt; item["role"] === "user")?.["content"]
-      const lastQuestion = chatContents.toReversed().find(item =&gt; item["role"] === "user")?.["content"]
+      const firstQuestion = chatContents.find(item => item["role"] === "user")?.["content"]
+      const lastQuestion = chatContents.reverse().find(item => item["role"] === "user")?.["content"]
 
       // Delete invalid chats
       if (!firstQuestion) trashChat(file)
@@ -2024,7 +2025,7 @@ Query Perplexity via the `perplexity` keyword, the [Universal Action](https://ww
 	<key>variablesdontexport</key>
 	<array/>
 	<key>version</key>
-	<string>2025.1</string>
+	<string>2025.4</string>
 	<key>webaddress</key>
 	<string></string>
 </dict>

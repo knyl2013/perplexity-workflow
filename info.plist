@@ -2025,7 +2025,7 @@ Query Perplexity via the `perplexity` keyword, the [Universal Action](https://ww
 	<key>variablesdontexport</key>
 	<array/>
 	<key>version</key>
-	<string>2025.4</string>
+	<string>2025.5</string>
 	<key>webaddress</key>
 	<string></string>
 </dict>

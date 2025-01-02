@@ -87,7 +87,8 @@ function startStream(apiEndpoint, apiKey, apiOrgHeader, model, systemPrompt, con
 function addLinkToCitation(content, citations) {
   // Replace [citationNo] with [citationNo](citations[citationNo - 1])
   // But ignore [citationNo] that already has a link
-  return content.replace(/\[(\d+)\]/g, (match, citationNo) => {
+  return content.replace(/\[+(\d+)\]+(\(.*\))?/g, (match, citationNo, link) => {
+    if (link) return match;
     const citation = citations[citationNo - 1]
     return citation ? `[[${citationNo}]](${citation})` : match
   })

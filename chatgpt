@@ -84,6 +84,11 @@ function startStream(apiEndpoint, apiKey, apiOrgHeader, model, systemPrompt, con
   writeFile(pidStreamFile, task.processIdentifier.toString())
 }
 
+function addLinkToCitation(content, citations) {
+  // Replace [citationNo] with [citationNo](citations[citationNo - 1])
+  return content.replace(/\[(\d+)\]/g, (match, citationNo) => `[[${citationNo}]](${citations[citationNo - 1]})`)
+}
+
 function readStream(streamFile, chatFile, pidStreamFile) {
   const streamMarker = envVar("stream_marker") === "1"
   const streamString = $.NSString.stringWithContentsOfFileEncodingError(streamFile, $.NSUTF8StringEncoding, undefined).js
@@ -147,7 +152,7 @@ function readStream(streamFile, chatFile, pidStreamFile) {
     // Stop
     return JSON.stringify({
       response: `${responseText} [Connection Stalled]`,
-      footer: "You can ask ChatGPT to continue the answer",
+      footer: "You can ask Perplexity to continue the answer",
       behaviour: { response: "replacelast", scroll: "end" }
     })
   }
@@ -159,7 +164,8 @@ function readStream(streamFile, chatFile, pidStreamFile) {
   })
 
   // Last token finish reason
-  const finishReason = chunks.slice(-1)[0]["choices"][0]["finish_reason"]
+  const lastChunk = chunks.slice(-1)
+  const finishReason = lastChunk[0]["choices"][0]["finish_reason"]
 
   // If reponse is not finished, continue loop
   if (!finishReason) return JSON.stringify({
@@ -169,8 +175,10 @@ function readStream(streamFile, chatFile, pidStreamFile) {
     behaviour: { response: "replacelast", scroll: "end" }
   })
 
+  const citations = lastChunk[0]["citations"]
+
   // When finished, write history and delete stream files
-  appendChat(chatFile, { role: "assistant", content: responseText })
+  appendChat(chatFile, { role: "assistant", content: addLinkToCitation(responseText, citations) })
   deleteFile(streamFile)
   deleteFile(pidStreamFile)
 
@@ -178,13 +186,13 @@ function readStream(streamFile, chatFile, pidStreamFile) {
   const footerText = (function() {
     switch (finishReason) {
       case "legth": return "Maximum number of tokens reached"
-      case "content_filter": return "Content was omitted due to a flag from OpenAI content filters"
+      case "content_filter": return "Content was omitted due to a flag from PerplexityAI content filters"
     }
   })()
 
   // Stop
   return JSON.stringify({
-    response: responseText,
+    response: addLinkToCitation(responseText, citations),
     footer: footerText,
     behaviour: { response: "replacelast", scroll: "end" }
   })
@@ -197,7 +205,7 @@ function run(argv) {
   const maxContext = parseInt(envVar("max_context"))
   const apiKey = envVar("openai_api_key")
   const apiOrgHeader = envVar("openai_org_id") ? ["--header", `OpenAI-Organization: ${envVar("openai_org_id")}`] : []
-  const apiEndpointInit = envVar("chatgpt_api_endpoint") || "https://api.openai.com/v1/chat/completions"
+  const apiEndpointInit = envVar("chatgpt_api_endpoint") || "https://api.perplexity.ai/chat/completions"
   const apiEndpointInitHasPath = apiEndpointInit.replace(/^https?:\/\//, "").includes("/")
   const apiEndpoint = apiEndpointInitHasPath ? apiEndpointInit : `${apiEndpointInit}/v1/chat/completions`
   const systemPrompt = envVar("system_prompt")

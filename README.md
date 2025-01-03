@@ -10,7 +10,7 @@ An Alfred workflow for interacting with Perplexity AI, forked from the official 
 
 ## Setup
 
-1. [Create an PerplexityAI account get an API key](https://www.perplexity.ai/hub/getting-started).
+1. [Create an PerplexityAI account get an API key](https://docs.perplexity.ai/guides/getting-started#generate-an-api-key).
 2. Copy your secret key and add it to the [Workflow’s Configuration](https://www.alfredapp.com/help/workflows/user-configuration/).
 
 ### Usage

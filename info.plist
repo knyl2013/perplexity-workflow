@@ -4,8 +4,6 @@
 <dict>
 	<key>bundleid</key>
 	<string>com.alfredapp.waiyip.perplexityai</string>
-	<key>category</key>
-	<string>Productivity</string>
 	<key>connections</key>
 	<dict>
 		<key>002874FF-3AE4-4E8F-A4F8-65844E5D6CFB</key>
@@ -1494,14 +1492,15 @@ function run() {
   const archiveDir = `${envVar("alfred_workflow_data")}/archive`
   if (!$.NSFileManager.defaultManager.fileExistsAtPath(archiveDir)) return noArchives()
 
+	console.log(dirContents(archiveDir).filter(file =&gt; file.endsWith(".json")));
 
   const sfItems = dirContents(archiveDir)
-    .filter(file => file.endsWith(".json"))
+    .filter(file =&gt; file.endsWith(".json"))
     .reverse()
-    .flatMap(file => {
+    .flatMap(file =&gt; {
       const chatContents = readChat(file)
-      const firstQuestion = chatContents.find(item => item["role"] === "user")?.["content"]
-      const lastQuestion = chatContents.reverse().find(item => item["role"] === "user")?.["content"]
+      const firstQuestion = chatContents.find(item =&gt; item["role"] === "user")?.["content"]
+      const lastQuestion = chatContents.reverse().find(item =&gt; item["role"] === "user")?.["content"]
 
       // Delete invalid chats
       if (!firstQuestion) trashChat(file)
@@ -1565,12 +1564,19 @@ function run() {
 		</dict>
 	</array>
 	<key>readme</key>
-	<string>## Important
-This is not my work, but just a fork from the official [ChatGPT / DALL-E](https://alfred.app/workflows/alfredapp/openai/) (version 2024.19), but using Perplexity AI. So it supports web search as well.
+	<string># Perplexity AI Alfred Workflow
+
+An Alfred workflow for interacting with Perplexity AI, forked from the official [ChatGPT / DALL-E workflow](https://alfred.app/workflows/alfredapp/openai/) (version 2024.19), but using the [Perplexity](https://www.perplexity.ai/hub) API instead. So it supports web search.
+
+## Installation
+
+1. Download the latest version of the workflow from the [Releases](https://github.com/knyl2013/perplexity-workflow/releases) page.
+2. Double-click the downloaded `Perplexity.alfredworflow` file to install it in Alfred.
+3. Follow the setup instructions below to configure your API key.
 
 ## Setup
 
-1. [Create an PerplexityAI account get an API key](https://www.perplexity.ai/hub/getting-started).
+1. [Create an PerplexityAI account get an API key](https://docs.perplexity.ai/guides/getting-started#generate-an-api-key).
 2. Copy your secret key and add it to the [Workflow’s Configuration](https://www.alfredapp.com/help/workflows/user-configuration/).
 
 ### Usage
@@ -1581,11 +1587,11 @@ Query Perplexity via the `perplexity` keyword, the [Universal Action](https://ww
 
 ![Querying Perplexity](images/about/perplexitytextview.png)
 
-* &lt;kbd&gt;↩&lt;/kbd&gt; Ask a new question.
-* &lt;kbd&gt;⌘&lt;/kbd&gt;&lt;kbd&gt;↩&lt;/kbd&gt; Clear and start new chat.
-* &lt;kbd&gt;⌥&lt;/kbd&gt;&lt;kbd&gt;↩&lt;/kbd&gt; Copy last answer.
-* &lt;kbd&gt;⌃&lt;/kbd&gt;&lt;kbd&gt;↩&lt;/kbd&gt; Copy full chat.
-* &lt;kbd&gt;⇧&lt;/kbd&gt;&lt;kbd&gt;↩&lt;/kbd&gt; Stop generating answer.</string>
+- &lt;kbd&gt;↩&lt;/kbd&gt; Ask a new question.
+- &lt;kbd&gt;⌘&lt;/kbd&gt;&lt;kbd&gt;↩&lt;/kbd&gt; Clear and start new chat.
+- &lt;kbd&gt;⌥&lt;/kbd&gt;&lt;kbd&gt;↩&lt;/kbd&gt; Copy last answer.
+- &lt;kbd&gt;⌃&lt;/kbd&gt;&lt;kbd&gt;↩&lt;/kbd&gt; Copy full chat.
+- &lt;kbd&gt;⇧&lt;/kbd&gt;&lt;kbd&gt;↩&lt;/kbd&gt; Stop generating answer.</string>
 	<key>uidata</key>
 	<dict>
 		<key>002874FF-3AE4-4E8F-A4F8-65844E5D6CFB</key>
@@ -1942,20 +1948,16 @@ Query Perplexity via the `perplexity` keyword, the [Universal Action](https://ww
 			<key>config</key>
 			<dict>
 				<key>default</key>
-				<string>llama-3.1-sonar-small-128k-online</string>
+				<string>sonar</string>
 				<key>pairs</key>
 				<array>
 					<array>
-						<string>Small (llama 3.1 8B)</string>
-						<string>llama-3.1-sonar-small-128k-online</string>
+						<string>sonar</string>
+						<string>sonar</string>
 					</array>
 					<array>
-						<string>Large (llama 3.1 70B)</string>
-						<string>llama-3.1-sonar-large-128k-online</string>
-					</array>
-					<array>
-						<string>Huge (llama 3.1 405B)</string>
-						<string>llama-3.1-sonar-huge-128k-online</string>
+						<string>sonar-pro</string>
+						<string>sonar-pro</string>
 					</array>
 				</array>
 			</dict>
@@ -2025,7 +2027,7 @@ Query Perplexity via the `perplexity` keyword, the [Universal Action](https://ww
 	<key>variablesdontexport</key>
 	<array/>
 	<key>version</key>
-	<string>2025.5</string>
+	<string>2025.6</string>
 	<key>webaddress</key>
 	<string></string>
 </dict>

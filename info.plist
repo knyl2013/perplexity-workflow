@@ -1959,6 +1959,10 @@ Query Perplexity via the `perplexity` keyword, the [Universal Action](https://ww
 						<string>sonar-pro</string>
 						<string>sonar-pro</string>
 					</array>
+					<array>
+						<string>sonar-reasoning</string>
+						<string>sonar-reasoning</string>
+					</array>
 				</array>
 			</dict>
 			<key>description</key>
@@ -2027,7 +2031,7 @@ Query Perplexity via the `perplexity` keyword, the [Universal Action](https://ww
 	<key>variablesdontexport</key>
 	<array/>
 	<key>version</key>
-	<string>2025.6</string>
+	<string>2025.7</string>
 	<key>webaddress</key>
 	<string></string>
 </dict>

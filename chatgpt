@@ -141,7 +141,7 @@ function readStream(streamFile, chatFile, pidStreamFile) {
     .map(item => item.replace(/^data: /, "")) // Remove extraneous "data: "
     .flatMap(item => { try { return JSON.parse(item) } catch { return [] } }) // Parse as JSON
 
-  const responseText = chunks.map(item => item["choices"][0]?.["delta"]["content"]).join("")
+  const responseText = chunks.map(item => item["choices"][0]?.["delta"]["content"]).join("").replace("<think>", "```\n").replace("</think>", "```\n")
 
   // If File not modified for over 5 seconds, connection stalled
   const stalled = new Date().getTime() - fileModified(streamFile) > 5000
